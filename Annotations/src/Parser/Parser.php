@@ -1,21 +1,17 @@
 <?php
 namespace Annotations\Parser;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- * Description of Parser
- *
- * @author Analista-02
- */
+use ArrayObject;
+
 class Parser {
     private $parserClass;
     private $args;
     private $parse;
-   public function parse($str){
+    public function  __construct() {
+        $this->parse = new ArrayObject();
+    }
+
+    public function parse($str){
        preg_match_all("/@(.*) \((.*)\)/\n", $str, $matches);
        $this->setParserClass($matches[1])->setArguments($matches[2])->fill();
        return $this;
@@ -33,10 +29,11 @@ class Parser {
    
    protected function fill(){
        $count = count($this->getParserClass());
-       for($i=0;$i<$count;$i++){
-           //var_dump(end(explode("\\",$this->parserClass[$i])));      
-           $this->parse[$this->parserClass[$i]] = 
-                   new $this->parserClass[$i]($this->args[$i]);
+       for($i=0;$i<$count;$i++){     
+           $this->parse->offsetSet(
+                   $this->parserClass[$i],  
+                   new $this->parserClass[$i]($this->args[$i])
+                   );
        }
        return $this;
    }
@@ -48,9 +45,11 @@ class Parser {
    function getArgs() {
        return $this->args;
    }
-
-      
+   function getParse() {
+       return $this->parse;
+   }
+   
    public function getData($name) {      
-       return isset($this->parse[$name])?$this->parse[$name]:null;
+       return $this->parse->offsetExists($name)?$this->parse->offsetGet($name):NULL;
    }
 }
