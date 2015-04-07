@@ -1,0 +1,15 @@
+{
+    "name": "adminweb/annotations",
+    "authors": [
+        {
+            "name": "IgorDePaula",
+            "email": "igordepaula@adminweb.com.br"
+        }
+    ],
+    "autoload":{
+        "psr-4":{
+            "Annotations\\":"Annotations/src/"
+        }
+    },
+    "require": {}
+}
